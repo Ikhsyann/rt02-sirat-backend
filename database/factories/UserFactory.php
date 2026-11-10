@@ -42,4 +42,12 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    /**
+     * role di luar $fillable, jadi ditetapkan langsung pada model.
+     */
+    public function admin(): static
+    {
+        return $this->afterMaking(fn (User $user) => $user->forceFill(['role' => 'admin']));
+    }
 }

@@ -16,7 +16,7 @@ class AdminPanelTest extends TestCase
 
     public function test_admin_dapat_mengakses_panel(): void
     {
-        $user = User::factory()->create(['role' => 'admin']);
+        $user = User::factory()->admin()->create();
 
         $this->actingAs($user)
             ->get('/admin')
@@ -25,16 +25,28 @@ class AdminPanelTest extends TestCase
 
     public function test_warga_ditolak_di_panel(): void
     {
-        $user = User::factory()->create(['role' => 'warga']);
+        $user = User::factory()->create();
 
         $this->actingAs($user)
             ->get('/admin')
             ->assertForbidden();
     }
 
+    public function test_role_tidak_dapat_diisi_melalui_mass_assignment(): void
+    {
+        $user = User::create([
+            'name' => 'Calon Admin',
+            'email' => 'calon@rt02.test',
+            'password' => 'password',
+            'role' => 'admin',
+        ]);
+
+        $this->assertSame('warga', $user->fresh()->role);
+    }
+
     public function test_halaman_semua_resource_dirender_tanpa_error(): void
     {
-        $user = User::factory()->create(['role' => 'admin']);
+        $user = User::factory()->admin()->create();
         $this->actingAs($user);
 
         foreach ([
@@ -48,8 +60,8 @@ class AdminPanelTest extends TestCase
 
     public function test_edit_anggota_dengan_akun_warga_tidak_error(): void
     {
-        $admin = User::factory()->create(['role' => 'admin']);
-        $warga = User::factory()->create(['role' => 'warga']);
+        $admin = User::factory()->admin()->create();
+        $warga = User::factory()->create();
 
         $kk = KartuKeluarga::create([
             'rumah_id' => Rumah::create([

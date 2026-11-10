@@ -17,7 +17,7 @@ class PengaturanTampilanTest extends TestCase
 
     public function test_admin_dapat_membuka_halaman_pengaturan_tampilan(): void
     {
-        $this->actingAs(User::factory()->create(['role' => 'admin']))
+        $this->actingAs(User::factory()->admin()->create())
             ->get('/admin/pengaturan-tampilan')
             ->assertOk()
             ->assertSee('Media Hero');
@@ -26,7 +26,7 @@ class PengaturanTampilanTest extends TestCase
     public function test_menyimpan_gambar_hero(): void
     {
         Storage::fake('public');
-        $this->actingAs(User::factory()->create(['role' => 'admin']));
+        $this->actingAs(User::factory()->admin()->create());
 
         Livewire::test(PengaturanTampilan::class)
             ->set('data.hero_media', [UploadedFile::fake()->image('contoh.png')])
@@ -40,7 +40,7 @@ class PengaturanTampilanTest extends TestCase
     public function test_format_di_luar_daftar_ditolak(): void
     {
         Storage::fake('public');
-        $this->actingAs(User::factory()->create(['role' => 'admin']));
+        $this->actingAs(User::factory()->admin()->create());
 
         Livewire::test(PengaturanTampilan::class)
             ->set('data.hero_media', [UploadedFile::fake()->create('hero.heic', 100, 'image/heic')])
