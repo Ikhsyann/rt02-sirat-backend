@@ -19,7 +19,7 @@ class KartuKeluargasTable
                 TextColumn::make('nomor_kk')->label('Nomor KK'),
                 TextColumn::make('rumah.nomor_rumah')->label('Rumah'),
                 TextColumn::make('rumah.blok.nama_blok')->label('Blok'),
-                ImageColumn::make('foto_kk')->disk('public'),
+                ImageColumn::make('foto_kk')->disk('local'),
                 TextColumn::make('anggota_keluargas_count')->counts('anggotaKeluargas')->label('Jumlah Anggota'),
             ])
             ->filters([
