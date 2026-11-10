@@ -23,6 +23,7 @@ class AnggotaKeluargaForm
                     ->maxLength(100),
                 TextInput::make('nik')
                     ->label('NIK')
+                    ->validationAttribute('NIK')
                     ->required()
                     ->unique(ignoreRecord: true)
                     ->length(16),
@@ -55,8 +56,14 @@ class AnggotaKeluargaForm
                     ->relationship(
                         name: 'user',
                         titleAttribute: 'email',
-                        modifyQueryUsing: fn ($query) => $query->where('role', 'warga')->whereDoesntHave('anggotaKeluarga'),
-                        ignoreRecord: true,
+                        // Akun yang sudah tertaut tetap muncul saat edit; ignoreRecord
+                        // tidak dipakai karena ia memakai qualified key tabel induk.
+                        modifyQueryUsing: fn ($query, $record) => $query
+                            ->where('role', 'warga')
+                            ->whereDoesntHave(
+                                'anggotaKeluarga',
+                                fn ($q) => $record ? $q->whereKeyNot($record->getKey()) : $q,
+                            ),
                     ),
             ]);
     }
