@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\AnggotaKeluarga;
 use App\Models\Absensi;
+use App\Models\AnggotaKeluarga;
 use App\Models\Blok;
 use App\Models\KartuKeluarga;
 use App\Models\Kegiatan;
@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // ---------- Akun ----------
-        User::create([
+        // role sengaja di luar $fillable; admin harus ditetapkan eksplisit.
+        User::forceCreate([
             'name' => 'Admin RT 02',
             'email' => 'admin@rt02.test',
             'password' => bcrypt('password'),
@@ -30,7 +31,6 @@ class DatabaseSeeder extends Seeder
             'name' => 'Budi Santoso',
             'email' => 'warga@rt02.test',
             'password' => bcrypt('password'),
-            'role' => 'warga',
         ]);
 
         // ---------- Blok & Rumah ----------

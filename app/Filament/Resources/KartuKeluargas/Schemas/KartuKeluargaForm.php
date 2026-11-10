@@ -23,12 +23,14 @@ class KartuKeluargaForm
                     ->unique(ignoreRecord: true)
                     ->maxLength(30),
                 // Format eksplisit: `image/*` juga menerima HEIC, yang tidak bisa dirender browser.
+                // Foto KK adalah dokumen pribadi: simpan di disk privat,
+                // bukan public/storage yang bisa diakses tanpa login.
                 FileUpload::make('foto_kk')
                     ->label('Foto Kartu Keluarga')
                     ->image()
                     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                     ->directory('kartu-keluarga')
-                    ->disk('public')
+                    ->disk('local')
                     ->maxSize(5120),
             ]);
     }
