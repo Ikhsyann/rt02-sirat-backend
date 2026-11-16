@@ -150,4 +150,28 @@ class AnggotaKeluargaAccountLinkTest extends TestCase
         $this->assertSame($warga->id, $anggota->fresh()->user_id);
         $this->assertSame('Nama Diperbarui', $anggota->fresh()->nama);
     }
+
+    public function test_linked_warga_account_cannot_be_promoted_to_superadmin(): void
+    {
+        $kk = $this->createKartuKeluarga();
+        $warga = User::factory()->create();
+
+        $this->createAnggota(
+            $kk,
+            $warga->id,
+            '6471010101010008'
+        );
+
+        try {
+            $warga->forceFill([
+                'role' => 'superadmin',
+            ])->save();
+
+            $this->fail('Akun warga yang terhubung tidak boleh menjadi superadmin.');
+        } catch (ValidationException $exception) {
+            $this->assertNotEmpty($exception->errors());
+        }
+
+        $this->assertSame('warga', $warga->fresh()->role);
+    }
 }

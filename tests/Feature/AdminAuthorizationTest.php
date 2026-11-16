@@ -76,8 +76,7 @@ class AdminAuthorizationTest extends TestCase
 
         Excel::assertDownloaded(
             'Laporan-Keuangan-RT-02.xlsx',
-            fn (KeuanganExport $export): bool =>
-                $export instanceof KeuanganExport
+            fn (KeuanganExport $export): bool => $export instanceof KeuanganExport
         );
     }
 
@@ -87,8 +86,19 @@ class AdminAuthorizationTest extends TestCase
 
         $warga = $this->createUserWithRole('warga');
         $admin = $this->createUserWithRole('admin');
+        $superadmin = $this->createUserWithRole('superadmin');
 
         $this->assertFalse($warga->canAccessPanel($panel));
         $this->assertTrue($admin->canAccessPanel($panel));
+        $this->assertTrue($superadmin->canAccessPanel($panel));
+    }
+
+    public function test_superadmin_can_access_filament_dashboard(): void
+    {
+        $superadmin = $this->createUserWithRole('superadmin');
+
+        $this->actingAs($superadmin)
+            ->get('/admin')
+            ->assertOk();
     }
 }

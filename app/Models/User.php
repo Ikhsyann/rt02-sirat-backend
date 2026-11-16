@@ -41,7 +41,7 @@ class User extends Authenticatable implements FilamentUser
     public function canAccessPanel(Panel $panel): bool
     {
         return $panel->getId() === 'admin'
-            && $this->role === 'admin';
+            && in_array($this->role, ['admin', 'superadmin'], true);
     }
 
     /**
@@ -61,7 +61,7 @@ class User extends Authenticatable implements FilamentUser
                 && $user->anggotaKeluarga()->exists()
             ) {
                 throw ValidationException::withMessages([
-                    'role' => 'Akun yang terhubung dengan anggota keluarga tidak dapat diubah menjadi admin.',
+                    'role' => 'Akun yang terhubung dengan anggota keluarga harus tetap memiliki role warga.',
                 ]);
             }
         });
