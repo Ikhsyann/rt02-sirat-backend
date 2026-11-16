@@ -14,13 +14,19 @@ class RumahForm
             ->components([
                 Select::make('blok_id')
                     ->label('Blok')
-                    ->relationship('blok', 'nama_blok')
+                    ->relationship(
+                        name: 'blok',
+                        titleAttribute: 'nama_blok'
+                    )
+                    ->searchable()
+                    ->preload()
                     ->required(),
+
                 TextInput::make('nomor_rumah')
                     ->label('Nomor Rumah')
+                    ->placeholder('Contoh: 001')
                     ->required()
-                    ->maxLength(20)
-                    ->unique(ignoreRecord: true),
+                    ->maxLength(255),
             ]);
     }
 }

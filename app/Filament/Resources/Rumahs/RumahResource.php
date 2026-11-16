@@ -18,11 +18,9 @@ class RumahResource extends Resource
 {
     protected static ?string $model = Rumah::class;
 
-    protected static ?string $modelLabel = 'Rumah';
-
-    protected static ?string $pluralModelLabel = 'Rumah';
-
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static ?string $recordTitleAttribute = 'nomor_rumah';
 
     public static function form(Schema $schema): Schema
     {

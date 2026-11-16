@@ -7,6 +7,7 @@ use App\Filament\Resources\Kegiatans\Pages\EditKegiatan;
 use App\Filament\Resources\Kegiatans\Pages\ListKegiatans;
 use App\Filament\Resources\Kegiatans\Schemas\KegiatanForm;
 use App\Filament\Resources\Kegiatans\Tables\KegiatansTable;
+use App\Filament\Resources\Kegiatans\RelationManagers\AbsensisRelationManager;
 use App\Models\Kegiatan;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -18,11 +19,9 @@ class KegiatanResource extends Resource
 {
     protected static ?string $model = Kegiatan::class;
 
-    protected static ?string $modelLabel = 'Kegiatan';
-
-    protected static ?string $pluralModelLabel = 'Kegiatan';
-
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static ?string $recordTitleAttribute = 'nama_kegiatan';
 
     public static function form(Schema $schema): Schema
     {
@@ -37,7 +36,7 @@ class KegiatanResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\AbsensisRelationManager::class,
+            AbsensisRelationManager::class,
         ];
     }
 

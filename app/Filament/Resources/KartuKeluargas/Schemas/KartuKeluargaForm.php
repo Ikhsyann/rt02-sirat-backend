@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\KartuKeluargas\Schemas;
 
+use App\Models\Rumah;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -15,23 +16,43 @@ class KartuKeluargaForm
             ->components([
                 Select::make('rumah_id')
                     ->label('Rumah')
-                    ->relationship('rumah', 'nomor_rumah')
+                    ->relationship(
+                        name: 'rumah',
+                        titleAttribute: 'nomor_rumah',
+                    )
+                    ->getOptionLabelFromRecordUsing(
+                        fn (Rumah $record): string =>
+                            "{$record->nomor_rumah} - Blok {$record->blok->nama_blok}"
+                    )
+                    ->searchable()
+                    ->preload()
                     ->required(),
+
                 TextInput::make('nomor_kk')
-                    ->label('Nomor KK')
+                    ->label('Nomor Kartu Keluarga')
+                    ->placeholder('Masukkan 16 digit nomor KK')
+                    ->helperText('Nomor KK harus terdiri dari 16 digit angka.')
                     ->required()
-                    ->unique(ignoreRecord: true)
-                    ->maxLength(30),
-                // Format eksplisit: `image/*` juga menerima HEIC, yang tidak bisa dirender browser.
-                // Foto KK adalah dokumen pribadi: simpan di disk privat,
-                // bukan public/storage yang bisa diakses tanpa login.
+                    ->minLength(16)
+                    ->maxLength(16)
+                    ->regex('/^[0-9]{16}$/')
+                    ->unique(ignoreRecord: true),
+
                 FileUpload::make('foto_kk')
                     ->label('Foto Kartu Keluarga')
                     ->image()
-                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                    ->directory('kartu-keluarga')
+                    ->acceptedFileTypes([
+                        'image/jpeg',
+                        'image/png',
+                        'image/webp',
+                    ])
+                    ->maxSize(5120)
                     ->disk('local')
-                    ->maxSize(5120),
+                    ->directory('kartu-keluarga')
+                    ->visibility('private')
+                    ->preventFilePathTampering()
+                    ->imageEditor()
+                    ->helperText('Format JPG, PNG, atau WEBP. Maksimal 5 MB.'),
             ]);
     }
 }

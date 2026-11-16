@@ -2,45 +2,31 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Validation\ValidationException;
 
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -49,13 +35,35 @@ class User extends Authenticatable implements FilamentUser
         ];
     }
 
-    public function anggotaKeluarga()
+    /**
+     * Menentukan siapa yang dapat mengakses panel Filament.
+     */
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $panel->getId() === 'admin'
+            && $this->role === 'admin';
+    }
+
+    /**
+     * Relasi User dengan Anggota Keluarga.
+     */
+    public function anggotaKeluarga(): HasOne
     {
         return $this->hasOne(AnggotaKeluarga::class);
     }
 
-    public function canAccessPanel(Panel $panel): bool
+    protected static function booted(): void
     {
-        return $this->role === 'admin';
+        static::saving(function (User $user): void {
+            if (
+                $user->isDirty('role')
+                && $user->role !== 'warga'
+                && $user->anggotaKeluarga()->exists()
+            ) {
+                throw ValidationException::withMessages([
+                    'role' => 'Akun yang terhubung dengan anggota keluarga tidak dapat diubah menjadi admin.',
+                ]);
+            }
+        });
     }
 }

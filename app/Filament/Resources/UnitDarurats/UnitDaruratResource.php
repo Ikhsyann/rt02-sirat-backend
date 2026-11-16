@@ -7,6 +7,7 @@ use App\Filament\Resources\UnitDarurats\Pages\EditUnitDarurat;
 use App\Filament\Resources\UnitDarurats\Pages\ListUnitDarurats;
 use App\Filament\Resources\UnitDarurats\Schemas\UnitDaruratForm;
 use App\Filament\Resources\UnitDarurats\Tables\UnitDaruratsTable;
+use App\Filament\Resources\UnitDarurats\RelationManagers\NomorDaruratsRelationManager;
 use App\Models\UnitDarurat;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -18,11 +19,9 @@ class UnitDaruratResource extends Resource
 {
     protected static ?string $model = UnitDarurat::class;
 
-    protected static ?string $modelLabel = 'Unit Darurat';
-
-    protected static ?string $pluralModelLabel = 'Unit Darurat';
-
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static ?string $recordTitleAttribute = 'nama_unit';
 
     public static function form(Schema $schema): Schema
     {
@@ -37,7 +36,7 @@ class UnitDaruratResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            NomorDaruratsRelationManager::class,
         ];
     }
 

@@ -2,9 +2,8 @@
 
 namespace App\Filament\Resources\Bloks\Tables;
 
-use Filament\Actions\BulkActionGroup;
+use App\Models\Blok;
 use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -15,20 +14,32 @@ class BloksTable
     {
         return $table
             ->columns([
-                TextColumn::make('nama_blok')->label('Nama Blok'),
-                TextColumn::make('rumahs_count')->counts('rumahs')->label('Jumlah Rumah'),
-            ])
-            ->filters([
-                //
+                TextColumn::make('nama_blok')
+                    ->label('Nama Blok')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('created_at')
+                    ->label('Tanggal Dibuat')
+                    ->dateTime('d M Y, H:i')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('updated_at')
+                    ->label('Terakhir Diperbarui')
+                    ->dateTime('d M Y, H:i')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->recordActions([
-                EditAction::make(),
-                DeleteAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                EditAction::make()
+                    ->label('Edit'),
+
+                DeleteAction::make()
+                    ->label('Hapus')
+                    ->disabled(
+                        fn (Blok $record): bool => $record->rumahs()->exists()
+                    ),
             ]);
     }
 }

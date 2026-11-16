@@ -18,11 +18,9 @@ class AnggotaKeluargaResource extends Resource
 {
     protected static ?string $model = AnggotaKeluarga::class;
 
-    protected static ?string $modelLabel = 'Anggota Keluarga';
-
-    protected static ?string $pluralModelLabel = 'Anggota Keluarga';
-
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static ?string $recordTitleAttribute = 'nama';
 
     public static function form(Schema $schema): Schema
     {

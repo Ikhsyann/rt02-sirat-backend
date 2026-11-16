@@ -13,9 +13,9 @@ class BlokForm
             ->components([
                 TextInput::make('nama_blok')
                     ->label('Nama Blok')
+                    ->placeholder('Contoh: Blok F1')
                     ->required()
-                    ->maxLength(20)
-                    ->unique(ignoreRecord: true),
+                    ->maxLength(255),
             ]);
     }
 }

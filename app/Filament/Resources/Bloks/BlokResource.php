@@ -18,11 +18,9 @@ class BlokResource extends Resource
 {
     protected static ?string $model = Blok::class;
 
-    protected static ?string $modelLabel = 'Blok';
-
-    protected static ?string $pluralModelLabel = 'Blok';
-
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static ?string $recordTitleAttribute = 'nama_blok';
 
     public static function form(Schema $schema): Schema
     {

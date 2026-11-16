@@ -138,12 +138,12 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // ---------- Keuangan (6 transaksi, saldo berjalan) ----------
-        Keuangan::create(['tanggal' => now()->subMonths(2)->startOfMonth(), 'jenis' => 'income', 'kategori' => 'Iuran', 'nama_barang' => 'Iuran Bulanan Warga', 'jumlah' => 40, 'harga_satuan' => 25000, 'total' => 1000000, 'saldo' => 1000000]);
-        Keuangan::create(['tanggal' => now()->subMonths(2)->addDays(2), 'jenis' => 'expense', 'kategori' => 'Kebersihan', 'nama_barang' => 'Upah Petugas Sampah', 'jumlah' => 2, 'harga_satuan' => 150000, 'total' => 300000, 'saldo' => 700000]);
-        Keuangan::create(['tanggal' => now()->subMonths(1)->startOfMonth(), 'jenis' => 'income', 'kategori' => 'Iuran', 'nama_barang' => 'Iuran Bulanan Warga', 'jumlah' => 40, 'harga_satuan' => 25000, 'total' => 1000000, 'saldo' => 1700000]);
-        Keuangan::create(['tanggal' => now()->subMonths(1)->addDays(4), 'jenis' => 'expense', 'kategori' => 'Keamanan', 'nama_barang' => 'Peralatan Pos Ronda', 'jumlah' => 5, 'harga_satuan' => 80000, 'total' => 400000, 'saldo' => 1300000]);
-        Keuangan::create(['tanggal' => now()->startOfMonth(), 'jenis' => 'income', 'kategori' => 'Donasi', 'nama_barang' => 'Donasi Kegiatan Sosial', 'jumlah' => 1, 'harga_satuan' => 500000, 'total' => 500000, 'saldo' => 1800000]);
-        Keuangan::create(['tanggal' => now()->subDays(2), 'jenis' => 'expense', 'kategori' => 'Kegiatan', 'nama_barang' => 'Perlengkapan Kerja Bakti', 'jumlah' => 8, 'harga_satuan' => 25000, 'total' => 200000, 'saldo' => 1600000]);
+        Keuangan::create(['tanggal' => now('Asia/Makassar')->subMonths(2)->startOfMonth(), 'jenis' => 'income', 'kategori' => 'Iuran', 'nama_barang' => 'Iuran Bulanan Warga', 'jumlah' => 40, 'harga_satuan' => 25000, 'total' => 1000000, 'saldo' => 1000000]);
+        Keuangan::create(['tanggal' => now('Asia/Makassar')->subMonths(2)->addDays(2), 'jenis' => 'expense', 'kategori' => 'Kebersihan', 'nama_barang' => 'Upah Petugas Sampah', 'jumlah' => 2, 'harga_satuan' => 150000, 'total' => 300000, 'saldo' => 700000]);
+        Keuangan::create(['tanggal' => now('Asia/Makassar')->subMonths(1)->startOfMonth(), 'jenis' => 'income', 'kategori' => 'Iuran', 'nama_barang' => 'Iuran Bulanan Warga', 'jumlah' => 40, 'harga_satuan' => 25000, 'total' => 1000000, 'saldo' => 1700000]);
+        Keuangan::create(['tanggal' => now('Asia/Makassar')->subMonths(1)->addDays(4), 'jenis' => 'expense', 'kategori' => 'Keamanan', 'nama_barang' => 'Peralatan Pos Ronda', 'jumlah' => 5, 'harga_satuan' => 80000, 'total' => 400000, 'saldo' => 1300000]);
+        Keuangan::create(['tanggal' => now('Asia/Makassar')->startOfMonth(), 'jenis' => 'income', 'kategori' => 'Donasi', 'nama_barang' => 'Donasi Kegiatan Sosial', 'jumlah' => 1, 'harga_satuan' => 500000, 'total' => 500000, 'saldo' => 1800000]);
+        Keuangan::create(['tanggal' => now('Asia/Makassar')->subDays(2), 'jenis' => 'expense', 'kategori' => 'Kegiatan', 'nama_barang' => 'Perlengkapan Kerja Bakti', 'jumlah' => 8, 'harga_satuan' => 25000, 'total' => 200000, 'saldo' => 1600000]);
 
         // ---------- Unit & Nomor Darurat ----------
         $unitPemadam = UnitDarurat::create(['nama_unit' => 'Pemadam Kebakaran']);
@@ -156,14 +156,14 @@ class DatabaseSeeder extends Seeder
         NomorDarurat::create(['unit_darurat_id' => $unitAmbulans->id, 'lokasi' => 'Balikpapan', 'nomor_telepon' => '119']);
 
         // ---------- Kegiatan & Absensi ----------
-        $kegiatan1 = Kegiatan::create(['nama_kegiatan' => 'Kerja Bakti Mingguan', 'slug' => Str::slug('Kerja Bakti Mingguan'), 'tanggal' => now()->subWeek(), 'deskripsi' => 'Bersih lingkungan dan saluran air RT 02.']);
-        $kegiatan2 = Kegiatan::create(['nama_kegiatan' => 'Peringatan Hari Kemerdekaan', 'slug' => Str::slug('Peringatan Hari Kemerdekaan 17an'), 'tanggal' => now()->subMonth(), 'deskripsi' => 'Lomba-lomba menyambut hari kemerdekaan untuk warga RT 02.']);
-        $kegiatan3 = Kegiatan::create(['nama_kegiatan' => 'Rapat Warga Rutin', 'slug' => Str::slug('Rapat Warga Rutin'), 'tanggal' => now()->subDays(3), 'deskripsi' => 'Rapat bulanan pengurus membahas perkembangan warga.']);
+        $kegiatan1 = Kegiatan::create(['nama_kegiatan' => 'Kerja Bakti Mingguan', 'slug' => Str::slug('Kerja Bakti Mingguan'), 'tanggal' => now('Asia/Makassar')->subWeek(), 'deskripsi' => 'Bersih lingkungan dan saluran air RT 02.']);
+        $kegiatan2 = Kegiatan::create(['nama_kegiatan' => 'Peringatan Hari Kemerdekaan', 'slug' => Str::slug('Peringatan Hari Kemerdekaan 17an'), 'tanggal' => now('Asia/Makassar')->subMonth(), 'deskripsi' => 'Lomba-lomba menyambut hari kemerdekaan untuk warga RT 02.']);
+        $kegiatan3 = Kegiatan::create(['nama_kegiatan' => 'Rapat Warga Rutin', 'slug' => Str::slug('Rapat Warga Rutin'), 'tanggal' => now('Asia/Makassar')->subDays(3), 'deskripsi' => 'Rapat bulanan pengurus membahas perkembangan warga.']);
 
         foreach ([
             [$kegiatan1, $budi, 'hadir'], [$kegiatan1, $andri, 'hadir'], [$kegiatan1, $ikhwan, 'izin'],
-            [$kegiatan2, $budi, 'hadir'], [$kegiatan2, $nuria, 'hadir'], [$kegiatan2, $pakRahmat, 'alpa'],
-            [$kegiatan3, $budi, 'hadir'], [$kegiatan3, $andri, 'sakit'],
+            [$kegiatan2, $budi, 'hadir'], [$kegiatan2, $nuria, 'hadir'], [$kegiatan2, $pakRahmat, 'tidak_hadir'],
+            [$kegiatan3, $budi, 'hadir'], [$kegiatan3, $andri, 'izin'],
         ] as [$k, $a, $s]) {
             Absensi::create(['kegiatan_id' => $k->id, 'anggota_keluarga_id' => $a->id, 'status_hadir' => $s]);
         }

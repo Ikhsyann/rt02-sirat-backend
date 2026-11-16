@@ -18,11 +18,9 @@ class KeuanganResource extends Resource
 {
     protected static ?string $model = Keuangan::class;
 
-    protected static ?string $modelLabel = 'Keuangan';
-
-    protected static ?string $pluralModelLabel = 'Keuangan';
-
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static ?string $recordTitleAttribute = 'nama_barang';
 
     public static function form(Schema $schema): Schema
     {

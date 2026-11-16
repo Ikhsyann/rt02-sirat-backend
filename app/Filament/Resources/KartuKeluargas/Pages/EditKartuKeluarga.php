@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\KartuKeluargas\Pages;
 
 use App\Filament\Resources\KartuKeluargas\KartuKeluargaResource;
-use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditKartuKeluarga extends EditRecord
@@ -12,8 +11,6 @@ class EditKartuKeluarga extends EditRecord
 
     protected function getHeaderActions(): array
     {
-        return [
-            DeleteAction::make(),
-        ];
+        return [];
     }
 }

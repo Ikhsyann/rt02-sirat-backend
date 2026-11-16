@@ -12,9 +12,10 @@ class UnitDaruratForm
         return $schema
             ->components([
                 TextInput::make('nama_unit')
-                    ->label('Nama Unit')
+                    ->label('Nama Unit Darurat')
+                    ->placeholder('Contoh: Pemadam Kebakaran')
                     ->required()
-                    ->maxLength(50)
+                    ->maxLength(255)
                     ->unique(ignoreRecord: true),
             ]);
     }

@@ -2,9 +2,8 @@
 
 namespace App\Filament\Resources\UnitDarurats\Tables;
 
-use Filament\Actions\BulkActionGroup;
+use App\Models\UnitDarurat;
 use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -15,20 +14,40 @@ class UnitDaruratsTable
     {
         return $table
             ->columns([
-                TextColumn::make('nama_unit')->label('Nama Unit'),
-                TextColumn::make('nomor_darurats_count')->counts('nomorDarurats')->label('Jumlah Nomor'),
+                TextColumn::make('nama_unit')
+                    ->label('Nama Unit Darurat')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('created_at')
+                    ->label('Tanggal Ditambahkan')
+                    ->dateTime('d M Y')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('updated_at')
+                    ->label('Terakhir Diperbarui')
+                    ->dateTime('d M Y')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                //
-            ])
+            ->defaultSort('nama_unit')
             ->recordActions([
-                EditAction::make(),
-                DeleteAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                EditAction::make()
+                    ->label('Ubah'),
+
+                DeleteAction::make()
+                    ->label('Hapus')
+                    ->disabled(
+                        fn (UnitDarurat $record): bool =>
+                            $record->nomorDarurats()->exists()
+                    )
+                    ->tooltip(
+                        fn (UnitDarurat $record): ?string =>
+                            $record->nomorDarurats()->exists()
+                                ? 'Unit tidak dapat dihapus karena masih memiliki nomor darurat.'
+                                : null
+                    ),
             ]);
     }
 }
