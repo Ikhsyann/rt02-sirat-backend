@@ -27,6 +27,7 @@ class AnggotaKeluargaForm
 
                         TextInput::make('nik')
                             ->label('NIK')
+                            ->validationAttribute('NIK')
                             ->placeholder('Masukkan 16 digit NIK')
                             ->helperText('NIK harus terdiri dari 16 digit angka.')
                             ->required()

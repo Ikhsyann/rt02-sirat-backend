@@ -16,9 +16,4 @@ class Kegiatan extends Model
     {
         return $this->hasMany(Absensi::class);
     }
-
-    public function anggotaHadir()
-    {
-        return $this->belongsToMany(AnggotaKeluarga::class, 'absensis');
-    }
 }
