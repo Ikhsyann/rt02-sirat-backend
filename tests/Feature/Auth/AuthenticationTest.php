@@ -3,6 +3,7 @@
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
+use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -10,45 +11,58 @@ class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_login_screen_can_be_rendered(): void
+    public function test_login_alias_redirects_to_filament_login(): void
     {
-        $response = $this->get('/login');
-
-        $response->assertStatus(200);
+        $this->get('/login')
+            ->assertRedirect('/admin/login');
     }
 
-    public function test_users_can_authenticate_using_the_login_screen(): void
+    public function test_filament_login_screen_can_be_rendered(): void
     {
-        $user = User::factory()->create();
-
-        $response = $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'password',
-        ]);
-
-        $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard', absolute: false));
+        $this->get('/admin/login')
+            ->assertOk();
     }
 
-    public function test_users_can_not_authenticate_with_invalid_password(): void
+    public function test_breeze_login_submission_is_not_available(): void
     {
-        $user = User::factory()->create();
-
         $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'wrong-password',
-        ]);
-
-        $this->assertGuest();
+            'email' => 'warga@example.com',
+            'password' => 'password',
+        ])->assertMethodNotAllowed();
     }
 
-    public function test_users_can_logout(): void
+    public function test_breeze_logout_route_is_not_available(): void
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->post('/logout');
+        $this->actingAs($user)
+            ->post('/logout')
+            ->assertNotFound();
+    }
 
-        $this->assertGuest();
-        $response->assertRedirect('/');
+    public function test_only_admin_can_access_filament_panel(): void
+    {
+        $panel = Filament::getPanel('admin');
+
+        $admin = User::factory()->create();
+        $admin->forceFill(['role' => 'admin'])->save();
+
+        $warga = User::factory()->create();
+
+        $this->assertTrue($admin->canAccessPanel($panel));
+        $this->assertFalse($warga->canAccessPanel($panel));
+    }
+
+    public function test_role_cannot_be_changed_through_mass_assignment(): void
+    {
+        $user = User::factory()->create();
+
+        $user->fill([
+            'role' => 'admin',
+        ]);
+
+        $user->save();
+
+        $this->assertSame('warga', $user->fresh()->role);
     }
 }

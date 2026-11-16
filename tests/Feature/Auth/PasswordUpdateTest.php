@@ -11,41 +11,37 @@ class PasswordUpdateTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_password_can_be_updated(): void
+    public function test_password_cannot_be_updated_through_backend(): void
     {
         $user = User::factory()->create();
 
-        $response = $this
-            ->actingAs($user)
-            ->from('/profile')
+        $this->actingAs($user)
             ->put('/password', [
                 'current_password' => 'password',
                 'password' => 'new-password',
                 'password_confirmation' => 'new-password',
-            ]);
+            ])
+            ->assertNotFound();
 
-        $response
-            ->assertSessionHasNoErrors()
-            ->assertRedirect('/profile');
-
-        $this->assertTrue(Hash::check('new-password', $user->refresh()->password));
+        $this->assertTrue(
+            Hash::check('password', $user->fresh()->password)
+        );
     }
 
-    public function test_correct_password_must_be_provided_to_update_password(): void
+    public function test_invalid_password_update_request_is_not_available(): void
     {
         $user = User::factory()->create();
 
-        $response = $this
-            ->actingAs($user)
-            ->from('/profile')
+        $this->actingAs($user)
             ->put('/password', [
                 'current_password' => 'wrong-password',
                 'password' => 'new-password',
                 'password_confirmation' => 'new-password',
-            ]);
+            ])
+            ->assertNotFound();
 
-        $response
-            ->assertSessionHasErrorsIn('updatePassword', 'current_password')
-            ->assertRedirect('/profile');
+        $this->assertTrue(
+            Hash::check('password', $user->fresh()->password)
+        );
     }
 }

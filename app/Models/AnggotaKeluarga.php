@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Validation\ValidationException;
 
 class AnggotaKeluarga extends Model
 {
@@ -30,5 +31,39 @@ class AnggotaKeluarga extends Model
     public function absensis()
     {
         return $this->hasMany(Absensi::class);
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (AnggotaKeluarga $anggota): void {
+            // Anggota keluarga boleh tidak memiliki akun.
+            if ($anggota->user_id === null) {
+                return;
+            }
+
+            $user = User::query()->find($anggota->user_id);
+
+            // Hanya akun warga yang boleh dihubungkan.
+            if (! $user || $user->role !== 'warga') {
+                throw ValidationException::withMessages([
+                    'user_id' => 'Hanya akun dengan role warga yang dapat dihubungkan.',
+                ]);
+            }
+
+            // Satu akun tidak boleh digunakan anggota lain.
+            $sudahTerhubung = static::query()
+                ->where('user_id', $anggota->user_id)
+                ->when(
+                    $anggota->exists,
+                    fn ($query) => $query->where('id', '!=', $anggota->getKey())
+                )
+                ->exists();
+
+            if ($sudahTerhubung) {
+                throw ValidationException::withMessages([
+                    'user_id' => 'Akun warga sudah terhubung dengan anggota keluarga lain.',
+                ]);
+            }
+        });
     }
 }

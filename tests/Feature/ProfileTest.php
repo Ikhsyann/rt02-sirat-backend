@@ -10,90 +10,65 @@ class ProfileTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_profile_page_is_displayed(): void
+    public function test_profile_page_is_not_available(): void
     {
         $user = User::factory()->create();
 
-        $response = $this
-            ->actingAs($user)
-            ->get('/profile');
-
-        $response->assertOk();
+        $this->actingAs($user)
+            ->get('/profile')
+            ->assertNotFound();
     }
 
-    public function test_profile_information_can_be_updated(): void
+    public function test_profile_information_cannot_be_updated(): void
     {
         $user = User::factory()->create();
 
-        $response = $this
-            ->actingAs($user)
-            ->patch('/profile', [
-                'name' => 'Test User',
-                'email' => 'test@example.com',
-            ]);
+        $originalName = $user->name;
+        $originalEmail = $user->email;
 
-        $response
-            ->assertSessionHasNoErrors()
-            ->assertRedirect('/profile');
+        $this->actingAs($user)
+            ->patch('/profile', [
+                'name' => 'Changed Name',
+                'email' => 'changed@example.com',
+            ])
+            ->assertNotFound();
 
         $user->refresh();
 
-        $this->assertSame('Test User', $user->name);
-        $this->assertSame('test@example.com', $user->email);
-        $this->assertNull($user->email_verified_at);
+        $this->assertSame($originalName, $user->name);
+        $this->assertSame($originalEmail, $user->email);
     }
 
-    public function test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged(): void
+    public function test_user_account_cannot_be_deleted_through_backend(): void
     {
         $user = User::factory()->create();
 
-        $response = $this
-            ->actingAs($user)
-            ->patch('/profile', [
-                'name' => 'Test User',
-                'email' => $user->email,
-            ]);
-
-        $response
-            ->assertSessionHasNoErrors()
-            ->assertRedirect('/profile');
-
-        $this->assertNotNull($user->refresh()->email_verified_at);
-    }
-
-    public function test_user_can_delete_their_account(): void
-    {
-        $user = User::factory()->create();
-
-        $response = $this
-            ->actingAs($user)
+        $this->actingAs($user)
             ->delete('/profile', [
                 'password' => 'password',
-            ]);
+            ])
+            ->assertNotFound();
 
-        $response
-            ->assertSessionHasNoErrors()
-            ->assertRedirect('/');
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'email' => $user->email,
+        ]);
 
-        $this->assertGuest();
-        $this->assertNull($user->fresh());
+        $this->assertAuthenticatedAs($user);
     }
 
-    public function test_correct_password_must_be_provided_to_delete_account(): void
+    public function test_invalid_account_deletion_request_is_not_available(): void
     {
         $user = User::factory()->create();
 
-        $response = $this
-            ->actingAs($user)
-            ->from('/profile')
+        $this->actingAs($user)
             ->delete('/profile', [
                 'password' => 'wrong-password',
-            ]);
+            ])
+            ->assertNotFound();
 
-        $response
-            ->assertSessionHasErrorsIn('userDeletion', 'password')
-            ->assertRedirect('/profile');
-
-        $this->assertNotNull($user->fresh());
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+        ]);
     }
 }

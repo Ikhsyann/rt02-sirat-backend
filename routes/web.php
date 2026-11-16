@@ -1,20 +1,20 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\ExportKeuanganController;
 use Illuminate\Support\Facades\Route;
 
+// Halaman informasi backend
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Alias login untuk redirect middleware auth.
+// Login admin sebenarnya tetap menggunakan Filament.
+Route::get('/login', function () {
+    return redirect('/admin/login');
+})->name('login');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-require __DIR__.'/auth.php';
+// Export laporan keuangan khusus admin.
+Route::get('/admin/export/keuangan', ExportKeuanganController::class)
+    ->middleware('auth')
+    ->name('admin.keuangan.export');

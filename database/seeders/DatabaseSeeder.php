@@ -15,8 +15,11 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin RT 02',
             'email' => 'admin@rt02.test',
             'password' => bcrypt('password'),
-            'role' => 'admin',
         ]);
+
+        $admin->forceFill([
+            'role' => 'admin',
+        ])->save();
 
         // Blok, Rumah, Kartu Keluarga, Anggota Keluarga
         $blok = Blok::create(['nama_blok' => 'F1']);
@@ -27,8 +30,11 @@ class DatabaseSeeder extends Seeder
             'name' => 'Budi Santoso',
             'email' => 'warga@rt02.test',
             'password' => bcrypt('password'),
-            'role' => 'warga',
         ]);
+
+        $userWarga->forceFill([
+            'role' => 'warga',
+        ])->save();
 
         $anggota = AnggotaKeluarga::create([
             'kartu_keluarga_id' => $kk->id,
