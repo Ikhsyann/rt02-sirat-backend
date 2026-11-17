@@ -8,12 +8,14 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('absensis', function (Blueprint $table) {
-            $table->unique(
-                ['kegiatan_id', 'anggota_keluarga_id'],
-                'absensis_kegiatan_anggota_unique'
-            );
-        });
+        if (! Schema::hasIndex('absensis', 'absensis_kegiatan_anggota_unique')) {
+            Schema::table('absensis', function (Blueprint $table) {
+                $table->unique(
+                    ['kegiatan_id', 'anggota_keluarga_id'],
+                    'absensis_kegiatan_anggota_unique'
+                );
+            });
+        }
     }
 
     public function down(): void

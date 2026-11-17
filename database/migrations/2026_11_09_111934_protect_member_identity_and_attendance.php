@@ -10,9 +10,11 @@ return new class extends Migration
     {
         // Satu akun hanya boleh terhubung ke satu anggota keluarga.
         // Kolom tetap nullable sehingga anggota tanpa akun tetap diperbolehkan.
-        Schema::table('anggota_keluargas', function (Blueprint $table) {
-            $table->unique('user_id');
-        });
+        if (! Schema::hasIndex('anggota_keluargas', 'anggota_keluargas_user_id_unique')) {
+            Schema::table('anggota_keluargas', function (Blueprint $table) {
+                $table->unique('user_id');
+            });
+        }
 
         // Riwayat absensi harus dipertahankan.
         // Anggota yang memiliki absensi tidak boleh dihapus.
