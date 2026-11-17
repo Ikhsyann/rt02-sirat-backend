@@ -39,12 +39,10 @@ class UnitDaruratsTable
                 DeleteAction::make()
                     ->label('Hapus')
                     ->disabled(
-                        fn (UnitDarurat $record): bool =>
-                            $record->nomorDarurats()->exists()
+                        fn (UnitDarurat $record): bool => $record->nomorDarurats()->exists()
                     )
                     ->tooltip(
-                        fn (UnitDarurat $record): ?string =>
-                            $record->nomorDarurats()->exists()
+                        fn (UnitDarurat $record): ?string => $record->nomorDarurats()->exists()
                                 ? 'Unit tidak dapat dihapus karena masih memiliki nomor darurat.'
                                 : null
                     ),

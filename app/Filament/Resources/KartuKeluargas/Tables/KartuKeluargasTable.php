@@ -17,10 +17,9 @@ class KartuKeluargasTable
                 TextColumn::make('nomor_kk')
                     ->label('Nomor KK')
                     ->formatStateUsing(
-                        fn (string $state): string =>
-                            substr($state, 0, 4)
-                            . str_repeat('*', 8)
-                            . substr($state, -4)
+                        fn (string $state): string => substr($state, 0, 4)
+                            .str_repeat('*', 8)
+                            .substr($state, -4)
                     )
                     ->searchable()
                     ->sortable(),
@@ -38,15 +37,13 @@ class KartuKeluargasTable
                 TextColumn::make('foto_kk')
                     ->label('Foto KK')
                     ->state(
-                        fn (KartuKeluarga $record): string =>
-                            filled($record->foto_kk)
+                        fn (KartuKeluarga $record): string => filled($record->foto_kk)
                                 ? 'Tersedia'
                                 : 'Belum diunggah'
                     )
                     ->badge()
                     ->color(
-                        fn (string $state): string =>
-                            $state === 'Tersedia' ? 'success' : 'gray'
+                        fn (string $state): string => $state === 'Tersedia' ? 'success' : 'gray'
                     ),
 
                 TextColumn::make('created_at')
@@ -62,8 +59,7 @@ class KartuKeluargasTable
                 DeleteAction::make()
                     ->label('Hapus')
                     ->disabled(
-                        fn (KartuKeluarga $record): bool =>
-                            $record->anggotaKeluargas()->exists()
+                        fn (KartuKeluarga $record): bool => $record->anggotaKeluargas()->exists()
                     ),
             ]);
     }

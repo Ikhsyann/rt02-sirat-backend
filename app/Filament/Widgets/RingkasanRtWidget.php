@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 class RingkasanRtWidget extends StatsOverviewWidget
 {
     protected static ?int $sort = 1;
+
     protected function getStats(): array
     {
         // Statistik kependudukan
@@ -86,6 +87,6 @@ class RingkasanRtWidget extends StatsOverviewWidget
 
     private function formatRupiah($nominal): string
     {
-        return 'Rp ' . number_format((float) $nominal, 0, ',', '.');
+        return 'Rp '.number_format((float) $nominal, 0, ',', '.');
     }
 }

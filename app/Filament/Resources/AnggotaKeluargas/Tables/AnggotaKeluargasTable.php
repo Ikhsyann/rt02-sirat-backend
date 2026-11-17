@@ -22,11 +22,10 @@ class AnggotaKeluargasTable
                 TextColumn::make('nik')
                     ->label('NIK')
                     ->formatStateUsing(
-                        fn (?string $state): string =>
-                            filled($state)
+                        fn (?string $state): string => filled($state)
                                 ? substr($state, 0, 4)
-                                    . str_repeat('*', 8)
-                                    . substr($state, -4)
+                                    .str_repeat('*', 8)
+                                    .substr($state, -4)
                                 : '-'
                     )
                     ->searchable()
@@ -35,9 +34,8 @@ class AnggotaKeluargasTable
                 TextColumn::make('kartuKeluarga.nomor_kk')
                     ->label('Nomor KK')
                     ->formatStateUsing(
-                        fn (?string $state): string =>
-                            filled($state)
-                                ? '••••••••••••' . substr($state, -4)
+                        fn (?string $state): string => filled($state)
+                                ? '••••••••••••'.substr($state, -4)
                                 : '-'
                     )
                     ->searchable(),
@@ -75,8 +73,7 @@ class AnggotaKeluargasTable
                 DeleteAction::make()
                     ->label('Hapus')
                     ->disabled(
-                        fn (AnggotaKeluarga $record): bool =>
-                            $record->absensis()->exists()
+                        fn (AnggotaKeluarga $record): bool => $record->absensis()->exists()
                             || $record->user_id !== null
                     ),
             ]);

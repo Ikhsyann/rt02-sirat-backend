@@ -8,7 +8,9 @@ use Filament\Widgets\ChartWidget;
 class KeuanganChartWidget extends ChartWidget
 {
     protected static ?int $sort = 2;
+
     protected int|string|array $columnSpan = 'full';
+
     protected ?string $heading = 'Grafik Pemasukan dan Pengeluaran';
 
     protected ?string $description = 'Perbandingan keuangan RT selama 6 bulan terakhir.';

@@ -35,7 +35,7 @@ class KeuangansTable
             $fraction = str_pad(substr($fraction, 0, 2), 2, '0');
 
             return ($negative ? '-Rp ' : 'Rp ')
-                . $whole . ',' . $fraction;
+                .$whole.','.$fraction;
         };
 
         return $table
@@ -131,13 +131,11 @@ class KeuangansTable
                         return $query
                             ->when(
                                 $data['dari'] ?? null,
-                                fn (Builder $query, $date): Builder =>
-                                    $query->whereDate('tanggal', '>=', $date)
+                                fn (Builder $query, $date): Builder => $query->whereDate('tanggal', '>=', $date)
                             )
                             ->when(
                                 $data['sampai'] ?? null,
-                                fn (Builder $query, $date): Builder =>
-                                    $query->whereDate('tanggal', '<=', $date)
+                                fn (Builder $query, $date): Builder => $query->whereDate('tanggal', '<=', $date)
                             );
                     }),
             ])

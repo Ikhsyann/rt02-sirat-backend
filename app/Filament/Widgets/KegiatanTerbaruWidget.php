@@ -45,15 +45,13 @@ class KegiatanTerbaruWidget extends TableWidget
                 TextColumn::make('foto_dokumentasi')
                     ->label('Dokumentasi')
                     ->state(
-                        fn (Kegiatan $record): string =>
-                            filled($record->foto_dokumentasi)
+                        fn (Kegiatan $record): string => filled($record->foto_dokumentasi)
                                 ? 'Tersedia'
                                 : 'Belum tersedia'
                     )
                     ->badge()
                     ->color(
-                        fn (string $state): string =>
-                            $state === 'Tersedia' ? 'success' : 'gray'
+                        fn (string $state): string => $state === 'Tersedia' ? 'success' : 'gray'
                     ),
             ])
             ->paginated(false)

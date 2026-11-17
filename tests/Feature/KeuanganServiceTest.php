@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\Keuangan;
 use App\Services\KeuanganService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Validation\ValidationException;
@@ -169,7 +168,7 @@ class KeuanganServiceTest extends TestCase
             'id' => $income->id,
         ]);
 
-        $this->assertSame(' -30000.00', ' ' . $expense->fresh()->saldo);
+        $this->assertSame(' -30000.00', ' '.$expense->fresh()->saldo);
     }
 
     public function test_invalid_quantity_is_rejected(): void

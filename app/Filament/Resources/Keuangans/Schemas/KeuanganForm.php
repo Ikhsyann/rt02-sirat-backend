@@ -4,8 +4,8 @@ namespace App\Filament\Resources\Keuangans\Schemas;
 
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
@@ -80,7 +80,7 @@ class KeuanganForm
 
                                 $total = (int) $jumlah * (float) $harga;
 
-                                return 'Perkiraan Total: Rp ' .
+                                return 'Perkiraan Total: Rp '.
                                     number_format($total, 2, ',', '.');
                             }),
                     ])

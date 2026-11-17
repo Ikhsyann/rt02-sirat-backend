@@ -21,8 +21,7 @@ class KartuKeluargaForm
                         titleAttribute: 'nomor_rumah',
                     )
                     ->getOptionLabelFromRecordUsing(
-                        fn (Rumah $record): string =>
-                            "{$record->nomor_rumah} - Blok {$record->blok->nama_blok}"
+                        fn (Rumah $record): string => "{$record->nomor_rumah} - Blok {$record->blok->nama_blok}"
                     )
                     ->searchable()
                     ->preload()

@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Kegiatans\Tables;
 
-use App\Models\Kegiatan;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\ImageColumn;

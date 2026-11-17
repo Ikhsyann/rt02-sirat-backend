@@ -280,15 +280,15 @@ class KeuanganService
         $absolute = abs($cents);
 
         $formatted = intdiv($absolute, 100)
-            . '.'
-            . str_pad(
+            .'.'
+            .str_pad(
                 (string) ($absolute % 100),
                 2,
                 '0',
                 STR_PAD_LEFT
             );
 
-        return $negative ? '-' . $formatted : $formatted;
+        return $negative ? '-'.$formatted : $formatted;
     }
 
     /**

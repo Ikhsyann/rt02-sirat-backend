@@ -12,8 +12,8 @@ class KeuanganExport implements Export, WithMultipleSheets
     public function sheets(): array
     {
         return [
-            new KeuanganSummarySheet(),
-            new KeuanganTransactionsSheet(),
+            new KeuanganSummarySheet,
+            new KeuanganTransactionsSheet,
         ];
     }
 }

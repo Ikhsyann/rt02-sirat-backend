@@ -62,16 +62,14 @@ class AnggotaKeluargaForm
                             ->relationship(
                                 name: 'kartuKeluarga',
                                 titleAttribute: 'nomor_kk',
-                                modifyQueryUsing: fn (Builder $query) =>
-                                    $query->with('rumah.blok'),
+                                modifyQueryUsing: fn (Builder $query) => $query->with('rumah.blok'),
                             )
                             ->getOptionLabelFromRecordUsing(
-                                fn (KartuKeluarga $record): string =>
-                                    'KK ••••' . substr($record->nomor_kk, -4)
-                                    . ' - Rumah '
-                                    . $record->rumah->nomor_rumah
-                                    . ' / Blok '
-                                    . $record->rumah->blok->nama_blok
+                                fn (KartuKeluarga $record): string => 'KK ••••'.substr($record->nomor_kk, -4)
+                                    .' - Rumah '
+                                    .$record->rumah->nomor_rumah
+                                    .' / Blok '
+                                    .$record->rumah->blok->nama_blok
                             )
                             ->searchable(['nomor_kk'])
                             ->required(),
@@ -152,8 +150,7 @@ class AnggotaKeluargaForm
                                 },
                             )
                             ->getOptionLabelFromRecordUsing(
-                                fn (User $record): string =>
-                                    "{$record->name} ({$record->email})"
+                                fn (User $record): string => "{$record->name} ({$record->email})"
                             )
                             ->searchable(['name', 'email'])
                             ->nullable()

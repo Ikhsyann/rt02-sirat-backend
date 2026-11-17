@@ -2,23 +2,18 @@
 
 namespace App\Exports\Sheets;
 
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Style\Border;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class KeuanganSummarySheet implements
-    FromArray,
-    WithTitle,
-    WithColumnFormatting,
-    WithColumnWidths,
-    WithStyles
+class KeuanganSummarySheet implements FromArray, WithColumnFormatting, WithColumnWidths, WithStyles, WithTitle
 {
     public function array(): array
     {
@@ -56,7 +51,7 @@ class KeuanganSummarySheet implements
             ['Total Pemasukan', $pemasukan],
             ['Total Pengeluaran', $pengeluaran],
             ['Saldo Akhir', (float) $saldoAkhir],
-            ['Jumlah Transaksi', $jumlahTransaksi . ' transaksi'],
+            ['Jumlah Transaksi', $jumlahTransaksi.' transaksi'],
         ];
     }
 

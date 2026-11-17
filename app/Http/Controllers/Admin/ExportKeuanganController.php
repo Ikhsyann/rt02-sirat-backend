@@ -23,7 +23,7 @@ class ExportKeuanganController
         $filename = 'Laporan-Keuangan-RT-02.xlsx';
 
         return Excel::download(
-            new KeuanganExport(),
+            new KeuanganExport,
             $filename
         );
     }
