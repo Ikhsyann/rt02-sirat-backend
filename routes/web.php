@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ExportDataController;
 use App\Http\Controllers\Admin\ExportKeuanganController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,3 +19,8 @@ Route::get('/login', function () {
 Route::get('/admin/export/keuangan', ExportKeuanganController::class)
     ->middleware('auth')
     ->name('admin.keuangan.export');
+
+// Export data (keuangan berfilter / penduduk) dari halaman "Export Data".
+Route::get('/admin/export/data', ExportDataController::class)
+    ->middleware('auth')
+    ->name('admin.export.data');
