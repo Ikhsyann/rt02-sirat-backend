@@ -52,6 +52,21 @@ class UserResource extends Resource
             ->whereIn('role', ['admin', 'superadmin']);
     }
 
+    /**
+     * Menu Manajemen Admin hanya tampil untuk superadmin. Policy viewAny
+     * sengaja juga membuka admin, tetapi akses itu ditujukan bagi resource
+     * Akun Warga, bukan resource pengelola ini.
+     */
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->role === 'superadmin';
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()?->role === 'superadmin';
+    }
+
     public static function getRelations(): array
     {
         return [];

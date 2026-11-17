@@ -88,20 +88,48 @@ class UserManagementTest extends TestCase
         $this->assertFalse($policy->restore($superadmin, $admin));
     }
 
-    public function test_only_superadmin_can_manage_user_records(): void
+    public function test_user_policy_is_target_aware(): void
     {
         $superadmin = $this->createUserWithRole('superadmin');
         $admin = $this->createUserWithRole('admin');
+        $targetAdmin = $this->createUserWithRole('admin');
+        $warga = $this->createUserWithRole('warga');
 
         $policy = new UserPolicy;
 
+        // Superadmin boleh semua target.
         $this->assertTrue($policy->viewAny($superadmin));
         $this->assertTrue($policy->create($superadmin));
         $this->assertTrue($policy->update($superadmin, $admin));
+        $this->assertTrue($policy->update($superadmin, $warga));
 
-        $this->assertFalse($policy->viewAny($admin));
-        $this->assertFalse($policy->create($admin));
+        // Admin boleh membuka sumber daya akun (untuk Akun Warga),
+        // tetapi hanya boleh menyentuh target ber-role warga.
+        $this->assertTrue($policy->viewAny($admin));
+        $this->assertTrue($policy->create($admin));
+        $this->assertTrue($policy->update($admin, $warga));
+        $this->assertFalse($policy->update($admin, $targetAdmin));
         $this->assertFalse($policy->update($admin, $superadmin));
+
+        // Warga ditolak semuanya.
+        $this->assertFalse($policy->viewAny($warga));
+        $this->assertFalse($policy->create($warga));
+        $this->assertFalse($policy->update($warga, $warga));
+    }
+
+    public function test_user_management_resource_restricted_to_superadmin(): void
+    {
+        $this->actingAs($this->createUserWithRole('superadmin'));
+
+        $this->assertTrue(UserResource::canViewAny());
+        $this->assertTrue(UserResource::canCreate());
+
+        $this->actingAs($this->createUserWithRole('admin'));
+
+        // Pembatasan ini ada di resource Manajemen Admin, bukan di policy,
+        // karena policy juga melayani resource Akun Warga.
+        $this->assertFalse(UserResource::canViewAny());
+        $this->assertFalse(UserResource::canCreate());
     }
 
     public function test_superadmin_can_create_admin_account(): void
