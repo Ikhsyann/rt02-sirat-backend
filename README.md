@@ -25,3 +25,11 @@ php artisan migrate:fresh --seed
 php artisan serve --port=8000
 ```
 Login Admin: `admin@rt02.test` / `password`.
+
+## Deploy
+
+Push ke `main` memicu `.github/workflows/deploy.yml`, yang SSH ke VPS lalu menjalankan `./deploy.sh` di direktori aplikasi.
+
+Secret GitHub yang dibutuhkan: `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`, `VPS_APP_PATH`.
+
+Backup database harian dijalankan `scripts/backup-db.sh` lewat cron VPS, 7 file terakhir disimpan.
