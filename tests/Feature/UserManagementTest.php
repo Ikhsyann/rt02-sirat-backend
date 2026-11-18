@@ -177,25 +177,21 @@ class UserManagementTest extends TestCase
         ]);
     }
 
-    public function test_superadmin_cannot_change_own_role(): void
+    public function test_superadmin_account_cannot_be_edited(): void
     {
         $superadmin = $this->createUserWithRole('superadmin');
+        $otherSuperadmin = $this->createUserWithRole('superadmin');
+        $admin = $this->createUserWithRole('admin');
 
         $this->actingAs($superadmin);
 
-        Livewire::test(EditUser::class, [
-            'record' => $superadmin->getRouteKey(),
-        ])
-            ->fillForm([
-                'role' => 'admin',
-            ])
-            ->call('save')
-            ->assertHasFormErrors(['role']);
+        // Akun superadmin bersifat tetap, termasuk akun sendiri.
+        $this->get("/admin/users/{$superadmin->id}/edit")->assertForbidden();
+        $this->get("/admin/users/{$otherSuperadmin->id}/edit")->assertForbidden();
 
-        $this->assertSame(
-            'superadmin',
-            $superadmin->fresh()->role
-        );
+        $this->assertFalse(UserResource::canEdit($superadmin));
+        $this->assertFalse(UserResource::canEdit($otherSuperadmin));
+        $this->assertTrue(UserResource::canEdit($admin));
     }
 
     public function test_superadmin_can_update_another_admin_account(): void
@@ -232,35 +228,5 @@ class UserManagementTest extends TestCase
         $this->actingAs($admin)
             ->get("/admin/users/{$targetAdmin->id}/edit")
             ->assertForbidden();
-    }
-
-    public function test_superadmin_can_demote_another_superadmin(): void
-    {
-        $currentSuperadmin = $this->createUserWithRole('superadmin');
-        $targetSuperadmin = $this->createUserWithRole('superadmin');
-
-        $this->actingAs($currentSuperadmin);
-
-        Livewire::test(EditUser::class, [
-            'record' => $targetSuperadmin->getRouteKey(),
-        ])
-            ->fillForm([
-                'name' => $targetSuperadmin->name,
-                'email' => $targetSuperadmin->email,
-                'role' => 'admin',
-                'password' => '',
-            ])
-            ->call('save')
-            ->assertHasNoFormErrors();
-
-        $this->assertSame(
-            'admin',
-            $targetSuperadmin->fresh()->role
-        );
-
-        $this->assertSame(
-            1,
-            User::where('role', 'superadmin')->count()
-        );
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users\Tables;
 
+use App\Models\User;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -53,7 +54,8 @@ class UsersTable
             ])
             ->recordActions([
                 EditAction::make()
-                    ->label('Kelola Akun'),
+                    ->label('Kelola Akun')
+                    ->visible(fn (User $record): bool => $record->role !== 'superadmin'),
             ])
             ->toolbarActions([]);
     }
