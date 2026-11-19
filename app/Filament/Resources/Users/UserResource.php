@@ -14,6 +14,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use UnitEnum;
 
 class UserResource extends Resource
@@ -65,6 +66,16 @@ class UserResource extends Resource
     public static function canCreate(): bool
     {
         return auth()->user()?->role === 'superadmin';
+    }
+
+    /**
+     * Akun superadmin bersifat tetap: tidak dapat diubah maupun diturunkan
+     * dari panel. Pembatasan ini disengaja berada di resource, bukan policy,
+     * karena policy juga melayani resource Akun Warga.
+     */
+    public static function canEdit(Model $record): bool
+    {
+        return parent::canEdit($record) && $record->role !== 'superadmin';
     }
 
     public static function getRelations(): array

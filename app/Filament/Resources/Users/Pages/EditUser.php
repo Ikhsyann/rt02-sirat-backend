@@ -13,6 +13,15 @@ class EditUser extends EditRecord
 {
     protected static string $resource = UserResource::class;
 
+    /**
+     * Halaman edit ditutup untuk akun superadmin; UserResource::canEdit
+     * adalah satu-satunya sumber aturan ini.
+     */
+    protected function authorizeAccess(): void
+    {
+        abort_unless(static::getResource()::canEdit($this->getRecord()), 403);
+    }
+
     protected function getHeaderActions(): array
     {
         // Tidak menyediakan tindakan hapus akun.
